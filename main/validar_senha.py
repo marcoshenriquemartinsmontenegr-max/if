@@ -1,7 +1,6 @@
 def validar_senha(senha):
     if len(senha) < 8:
-        print("mínimo 8 caracteres!")
-        return False
+        raise ValueError("mínimo 8 caracteres")
 
     tem_maiuscula = False
     tem_minuscula = False
@@ -11,23 +10,20 @@ def validar_senha(senha):
     for letra in senha:
         if letra.isupper():
             tem_maiuscula = True
-
         if letra.islower():
             tem_minuscula = True
-  
         if letra.isdigit():
             tem_numero = True
- 
         if not letra.isalpha() and not letra.isdigit():
             tem_especial = True
-        
+
     if not tem_maiuscula:
-        print("Pelo menos uma maiuscula")
+        raise ValueError("precisa maiúscula")
     if not tem_minuscula:
-        print("Pelo menos uma minuscula")
+        raise ValueError("precisa minúscula")
     if not tem_numero:
-        print("Pelo menos um numero")
+        raise ValueError("precisa número")
     if not tem_especial:
-        print("Pelo menos um caracter especial")
-    else:
-        print("Logando")
+        raise ValueError("precisa caractere especial")
+
+    return senha
