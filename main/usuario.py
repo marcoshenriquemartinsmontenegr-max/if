@@ -1,8 +1,8 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date
-from validar_senha import validar_senha
-from validar_idade import validar_idade
-
+from .validar_senha import validar_senha
+from .validar_idade import validar_idade
+from database.banco_dados import inserir_usuario 
 
 class Usuario(BaseModel):
     nome: str
@@ -15,6 +15,7 @@ class Usuario(BaseModel):
     pontos: int = 100
     ranking: int = 0
     status: str = "ativo"
+    data_cadastro: date
 
     @field_validator("senha")
     @classmethod
@@ -24,7 +25,7 @@ class Usuario(BaseModel):
     @field_validator("data_nascimento")
     @classmethod
     def validar_campo_idade(cls, data_nascimento):
-        return validar_idade(data_nascimento)
+        return validar_idade(data_nascimento)   
 
 
 usuario = Usuario(
@@ -33,7 +34,11 @@ usuario = Usuario(
     cpf="06712345678",
     data_nascimento="2005-12-13",
     login="mhmm",
-    senha="12345Hm@"
+    senha="12345Hm@",
+    data_cadastro="2022-11-16"
 )
+
+inserir_usuario
+print("Usuario salvo")
 
 print(usuario)

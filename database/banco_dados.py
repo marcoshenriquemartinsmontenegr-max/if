@@ -24,16 +24,19 @@ CREATE TABLE Usuario (
 """)
 
     cursor.execute("""
-CREATE TABLE Aposta (
-    idUsuario INTEGER,
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    idJogo INTEGER,
-    data_aposta DATETIME NOT NULL,
-    valor_aposta INTEGER NOT NULL,
-    status TEXT NOT NULL,
-    multiplicar_aposta REAL NOT NULL
-);
-""")
+    CREATE TABLE Aposta (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        idUsuario INTEGER,
+        idJogo INTEGER,
+        data_aposta DATETIME NOT NULL,
+        valor_aposta INTEGER NOT NULL,
+        status TEXT NOT NULL,
+        multiplicar_aposta REAL NOT NULL,
+
+        FOREIGN KEY (idUsuario) REFERENCES Usuario(id),
+        FOREIGN KEY (idJogo) REFERENCES Jogo(id)
+    );
+    """)
 
     cursor.execute("""
 CREATE TABLE Jogo (
@@ -46,20 +49,35 @@ CREATE TABLE Jogo (
 );
 """)
 
-    cursor.execute("""
-ALTER TABLE Aposta
-ADD FOREIGN KEY (idUsuario) REFERENCES Usuario(id);
-""")
 
+def inserir_usuario(usuario):
+    conexao = sqlite3.connect("usuarios.db")
+    cursor = conexao.cursor()
     cursor.execute("""
-ALTER TABLE Aposta
-ADD FOREIGN KEY (idJogo) REFERENCES Jogo(id);
-""")
+            INSERT INTO Usuario (nome, admin, email, cpf, data_nascimento, login, senha, pontos, ranking, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                usuario.nome,
+                usuario.admin,
+                usuario.email,
+                usuario.cpf,
+                usuario.data_nascimento,
+                usuario.login,
+                usuario.senha,
+                usuario.pontos,
+                usuario.ranking,
+                usuario.status,
+                usuario.data_cadastro
+            ))
 
-    cursor.execute("""
-ALTER TABLE Jogo
-ADD FOREIGN KEY (idAposta) REFERENCES Aposta(id);
-""")
+
+
+
+
+
+
 
     conexao.commit()
+    cursor.execute("SELECT * FROM Usuario")
+    print(cursor.fetchall())
     conexao.close()
