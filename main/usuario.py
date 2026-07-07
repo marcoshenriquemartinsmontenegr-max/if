@@ -38,7 +38,7 @@ usuario = Usuario(
     data_cadastro="2022-11-16"
 )
 
-inserir_usuario
+inserir_usuario(usuario)
 print("Usuario salvo")
 
 print(usuario)
