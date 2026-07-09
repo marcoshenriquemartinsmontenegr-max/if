@@ -68,11 +68,15 @@ def inserir_usuario(usuario):
             ))
 
 
-def buscar_usuario_login(login):
+def buscar_usuario_por_login(login):
     with sqlite3.connect("usuarios.db") as conexao:
         cursor = conexao.cursor()
         cursor.execute("SELECT * FROM Usuario WHERE login = ?", (login,))
-        return cursor.fetchone()  
+        return cursor.fetchone()
+    usuario = cursor.fetchone()
+
+
+
 
 
 
