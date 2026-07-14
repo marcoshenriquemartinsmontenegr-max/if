@@ -75,6 +75,20 @@ def buscar_usuario_por_login(login):
         return cursor.fetchone()
     usuario = cursor.fetchone()
 
+def inserir_aposta(aposta, idUsuario, data_aposta):
+    with sqlite3.connect("usuarios.db") as conexao:
+        cursor = conexao.cursor()
+        cursor.execute ("""
+            INSERT INTO Aposta (idUsuario, idJogo, data_aposta, valor_aposta, status, multiplicar_aposta)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                idUsuario,
+                aposta.id_jogo,
+                data_aposta,
+                aposta.valor_aposta,
+                aposta.status,
+                aposta.multiplicar_aposta
+            ))
 
 
 
