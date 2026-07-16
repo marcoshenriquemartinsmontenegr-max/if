@@ -91,6 +91,10 @@ def inserir_aposta(aposta, idUsuario, data_aposta):
             ))
 
 
+def atualizar_pontos(idUsuario, novos_pontos):
+    with sqlite3.connect("usuarios.db") as conexao:
+        cursor = conexao.cursor()
+        cursor.execute("UPDATE Usuario WHERE idUsuario = ?", (idUsuario))
 
 
 

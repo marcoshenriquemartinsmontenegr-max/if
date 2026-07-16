@@ -12,3 +12,4 @@ aposta = Aposta(
 
 resultado = registrar_aposta(aposta, "mhmm")
 print(resultado)
+
