@@ -1,6 +1,6 @@
 from services.apostas_service import registrar_aposta
 from main.aposta import Aposta
-
+from services.usuario_services import buscar_usuario
 
 
 aposta = Aposta(
@@ -13,3 +13,4 @@ aposta = Aposta(
 resultado = registrar_aposta(aposta, "mhmm")
 print(resultado)
 
+print(buscar_usuario("mhmm"))

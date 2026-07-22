@@ -73,7 +73,7 @@ def buscar_usuario_por_login(login):
         cursor = conexao.cursor()
         cursor.execute("SELECT * FROM Usuario WHERE login = ?", (login,))
         return cursor.fetchone()
-    usuario = cursor.fetchone()
+        usuario = cursor.fetchone()
 
 def inserir_aposta(aposta, idUsuario, data_aposta):
     with sqlite3.connect("usuarios.db") as conexao:
@@ -91,10 +91,13 @@ def inserir_aposta(aposta, idUsuario, data_aposta):
             ))
 
 
-def atualizar_pontos(idUsuario, novos_pontos):
+def atualizar_pontos(id, novos_pontos):
     with sqlite3.connect("usuarios.db") as conexao:
         cursor = conexao.cursor()
-        cursor.execute("UPDATE Usuario WHERE idUsuario = ?", (idUsuario))
+        cursor.execute("UPDATE Usuario SET pontos = ? WHERE id = ?", (novos_pontos, id))
+
+
+
 
 
 
