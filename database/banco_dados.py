@@ -79,4 +79,15 @@ def atualizar_pontos(usuario_id: int, novos_pontos: int):
             usuario.pontos = novos_pontos
             session.commit()
 
+
+
+
+
+
+
+
+
+
+
+
 Base.metadata.create_all(engine)
