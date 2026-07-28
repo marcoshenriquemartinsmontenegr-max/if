@@ -1,15 +1,24 @@
 from datetime import date
+from database.banco_dados import Aposta as ApostaDB
 from database.banco_dados import atualizar_pontos, inserir_aposta
-from main.aposta import Aposta
+from main.aposta import Aposta as ApostaSchema
 from services.usuario_service import buscar_usuario
 
 
-def registrar_aposta(aposta: Aposta, login):
+def registrar_aposta(aposta: ApostaSchema, login: str):
     usuario = buscar_usuario(login)
     if usuario.pontos < aposta.valor_aposta:
         raise ValueError('Pontos insuficientes')
+    
+    aposta_banco = ApostaDB(
+        idUsuario=usuario.id,
+        idJogo=aposta.id_jogo,
+        data_aposta=date.today(),
+        valor_aposta=aposta.valor_aposta,
+        multiplicar_aposta=aposta.multiplicar_aposta,
+        status=aposta.status
+    )
+    inserir_aposta(aposta_banco)
     novos_pontos = usuario.pontos - aposta.valor_aposta
-    aposta.idUsuario = usuario.id
-    aposta.data_aposta = date.today()
-    inserir_aposta(aposta)
     atualizar_pontos(usuario.id, novos_pontos)
+    return aposta_banco
