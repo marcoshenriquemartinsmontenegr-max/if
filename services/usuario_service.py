@@ -17,3 +17,42 @@ def buscar_usuario(login: str):
     if usuario is None:
         raise ValueError('Usuário não encontrado')
     return usuario
+
+
+
+def deslogar(id_usuario: int):
+# 1. Conectar com o banco de dados (Sessionlocal)
+
+# 2. Buscar o usuário pelo id
+
+# 3. Mudar o campo de status para inativo (False)
+
+# 4. Salvar no banco (db.commit())
+
+# 5. Fechar conexão (db.close())
+    pass
+
+
+
+def alterar_senha(id_usuario, senha_atual, nova_senha):
+    # 1. Conectar com o banco de dados (SessionLocal)
+    
+    # 2. Buscar o usuário pelo id no banco
+    
+    # 3. Validar se o usuário foi encontrado
+    
+    # 4. Validar se a 'senha_atual' recebida confere com a senha salva no banco
+    
+    # 5. (Opcional) Validar se a 'nova_senha' atende aos requisitos (ex: tamanho mínimo)
+    
+    # 6. Atualizar o campo do banco com a 'nova_senha' recebida
+    
+    # 7. Salvar as alterações no banco (db.commit())
+    
+    # 8. Fechar a conexão com o banco (db.close())
+    
+    # 9. Retornar mensagem de sucesso
+    pass  
+
+
+

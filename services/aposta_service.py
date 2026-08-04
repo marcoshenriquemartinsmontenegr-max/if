@@ -37,4 +37,27 @@ def consultar_status_aposta(id_aposta: int):
 
 
 
+
+def multiplicar_aposta(id_aposta: int, multiplicador: int):
+    # 1. Conectar com o banco de dados (SessionLocal)
     
+    # 2. Buscar a aposta pelo id_aposta
+    #    (E buscar também o usuário para olhar o saldo dele)
+    
+    # 3. Testar: a aposta existe?
+    #    Se não existir, retornar mensagem de erro
+    
+    # 4. Calcular o custo adicional da multiplicação
+    
+    # 5. Testar: usuario.pontos >= custo_adicional?
+    #    Se não tiver saldo, retornar erro de "Pontos insuficientes"
+    
+    # 6. Atualizar os pontos do usuário e o novo valor da aposta
+    
+    # 7. Salvar no banco (db.commit())
+    
+    # 8. Fechar conexão (db.close())
+    
+    # 9. Retornar mensagem de sucesso com os dados atualizados
+    pass
+
