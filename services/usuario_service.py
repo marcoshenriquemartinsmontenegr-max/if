@@ -1,6 +1,10 @@
 from database.banco_dados import Usuario as UsuarioDB
 from database.banco_dados import buscar_usuario_por_login, inserir_usuario
-from main.usuario import UsuarioSchema
+from models.usuario import UsuarioSchema
+from database.banco_dados import Session
+from sqlalchemy import select
+from database.banco_dados import Usuario
+
 
 
 def cadastrar_usuario(dados_usuario: UsuarioSchema):
@@ -17,6 +21,22 @@ def buscar_usuario(login: str):
     if usuario is None:
         raise ValueError('Usuário não encontrado')
     return usuario
+
+
+
+def inserir_usuario(usuario):
+    with Session() as session:
+        session.add(usuario)
+        session.commit()
+
+
+
+
+def buscar_usuario_por_login(login:str):
+    with Session() as session:
+        stmt = select(Usuario).where(Usuario.login == login)
+        usuario = session.scalars(stmt).first()
+        return usuario
 
 
 

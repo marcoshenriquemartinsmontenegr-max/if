@@ -1,13 +1,15 @@
 from datetime import date
-from database.banco_dados import Aposta as ApostaDB
-from database.banco_dados import atualizar_pontos, inserir_aposta
-from main.aposta import Aposta as ApostaSchema
+from database.banco_dados import Session, atualizar_pontos, inserir_aposta
+from models.aposta import Aposta as ApostaDB  # Model do Banco
+from models.aposta import ApostaSchema  # Schema do Pydantic
+from models.usuario import Usuario  # Model do Banco
 from services.usuario_service import buscar_usuario
-from database.banco_dados import Session
-from main.aposta import Aposta
+
 
 def registrar_aposta(aposta: ApostaSchema, login: str):
     usuario = buscar_usuario(login)
+    if not usuario:
+        raise ValueError("Usuário não encontrado")
     if usuario.pontos < aposta.valor_aposta:
         raise ValueError('Pontos insuficientes')
     
@@ -28,36 +30,32 @@ def registrar_aposta(aposta: ApostaSchema, login: str):
 
 
 def consultar_status_aposta(id_aposta: int):
-    db = Session()
-    aposta = db.query(Aposta).filter(Aposta.id == id_aposta).first()
-    db.close()
-    if aposta:
-        return aposta.status
-    return "Aposta não encontrada"
+    with Session() as db:
+        aposta = db.query(ApostaDB).filter(ApostaDB.id == id_aposta).first()
+        if aposta:
+            return aposta.status
+        return "Aposta não encontrada"
 
 
 
 
-def multiplicar_aposta(id_aposta: int, multiplicador: int):
-    # 1. Conectar com o banco de dados (SessionLocal)
-    
-    # 2. Buscar a aposta pelo id_aposta
-    #    (E buscar também o usuário para olhar o saldo dele)
-    
-    # 3. Testar: a aposta existe?
-    #    Se não existir, retornar mensagem de erro
-    
-    # 4. Calcular o custo adicional da multiplicação
-    
-    # 5. Testar: usuario.pontos >= custo_adicional?
-    #    Se não tiver saldo, retornar erro de "Pontos insuficientes"
-    
-    # 6. Atualizar os pontos do usuário e o novo valor da aposta
-    
-    # 7. Salvar no banco (db.commit())
-    
-    # 8. Fechar conexão (db.close())
-    
-    # 9. Retornar mensagem de sucesso com os dados atualizados
-    pass
-
+def multiplicar_aposta(id_aposta: int, id_usuario: int, multiplicador: int):
+    with Session() as db:
+        aposta = db.query(ApostaDB).filter(ApostaDB.id == id_aposta).first()
+        if not aposta:
+            return {"erro": "Aposta não encontrada."}
+        usuario = db.query(Usuario).filter(Usuario.id == id_usuario).first()
+        if not usuario:
+            return {"erro": "Usuário não encontrado."}
+        novo_valor = aposta.valor_aposta * multiplicador
+        custo_adicional = novo_valor - aposta.valor_aposta
+        if usuario.pontos < custo_adicional:
+            return {"erro": "Pontos insuficientes."}
+        usuario.pontos -= custo_adicional
+        aposta.valor_aposta = novo_valor
+        db.commit()
+        return {
+            "sucesso": True,
+            "novo_valor_aposta": aposta.valor_aposta,
+            "saldo_restante": usuario.pontos,
+        }

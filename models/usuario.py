@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date
-from main.validar_senha import validar_senha
-from main.validar_idade import validar_idade
+from services.validar_senha import validar_senha
+from services.validar_idade import validar_idade
 
 class UsuarioSchema(BaseModel):
     nome: str
