@@ -1,8 +1,8 @@
 from datetime import date
-from database.banco_dados import Session, atualizar_pontos, inserir_aposta
-from models.aposta import Aposta as ApostaDB  # Model do Banco
+from database.banco_dados import Session, select, atualizar_pontos, inserir_aposta
+from database.banco_dados import Aposta as ApostaDB  # Model do Banco
+from database.banco_dados import Usuario  # Model do Banco
 from models.aposta import ApostaSchema  # Schema do Pydantic
-from models.usuario import Usuario  # Model do Banco
 from services.usuario_service import buscar_usuario
 
 
@@ -12,7 +12,11 @@ def registrar_aposta(aposta: ApostaSchema, login: str):
         raise ValueError("Usuário não encontrado")
     if usuario.pontos < aposta.valor_aposta:
         raise ValueError('Pontos insuficientes')
-    
+    if usuario.pontos <= 0:
+                usuario.pontos = 0
+                usuario.status = 'zerado'
+                Session.commit
+
     aposta_banco = ApostaDB(
         idUsuario=usuario.id,
         idJogo=aposta.id_jogo,
@@ -59,3 +63,11 @@ def multiplicar_aposta(id_aposta: int, id_usuario: int, multiplicador: int):
             "novo_valor_aposta": aposta.valor_aposta,
             "saldo_restante": usuario.pontos,
         }
+
+
+
+def listar_apostas_ativas():
+    with Session() as session:
+        stmt = select(ApostaDB).where(ApostaDB.status == 'ativa')
+        apostas_ativas = session.scalars(stmt).all()
+        return apostas_ativas

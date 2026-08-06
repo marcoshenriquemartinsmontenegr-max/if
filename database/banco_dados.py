@@ -24,7 +24,7 @@ class Usuario(Base):
     ranking: Mapped[int] = mapped_column(Integer, nullable=False)
     status: Mapped[str] = mapped_column(String, nullable=False)
     data_cadastro: Mapped[date] = mapped_column(Date, nullable=False, default=date.today)
-
+    acertos: Mapped[int] = mapped_column(Integer, nullable=False)
 
 
 class Aposta(Base):
@@ -48,45 +48,6 @@ class Jogo(Base):
     time_fora: Mapped[str] = mapped_column(String, nullable=False)
     resultado: Mapped[int] = mapped_column(Integer, nullable=False)
     odd: Mapped[float] = mapped_column(Float, nullable=False)
-
-
-def inserir_usuario(usuario):
-    with Session() as session:
-        session.add(usuario)
-        session.commit()
-
-
-
-
-def buscar_usuario_por_login(login:str):
-    with Session() as session:
-        stmt = select(Usuario).where(Usuario.login == login)
-        usuario = session.scalars(stmt).first()
-        return usuario
-
-
-
-def inserir_aposta(aposta):
-    with Session() as session:
-        session.add(aposta)
-        session.commit()
-
-
-def atualizar_pontos(usuario_id: int, novos_pontos: int):
-    with Session() as session:
-        usuario = session.get(Usuario, usuario_id)
-        if usuario:
-            usuario.pontos = novos_pontos
-            session.commit()
-
-
-
-
-
-
-
-
-
 
 
 

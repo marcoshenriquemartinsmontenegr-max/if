@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class Aposta(BaseModel):
+class ApostaSchema(BaseModel):
     id_jogo: int
     valor_aposta: int
     status: str = "em aberto"
